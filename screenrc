@@ -1,0 +1,66 @@
+# see http://www4.informatik.uni-erlangen.de/~jnweiger/screen-faq.html
+# support color X terminals
+#termcap  xterm 'XT:AF=\E[3%dm:AB=\E[4%dm:AX'
+#terminfo xterm 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX'
+#termcapinfo xterm 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+#termcap  xtermc 'XT:AF=\E[3%dm:AB=\E[4%dm:AX'
+#terminfo xtermc 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX'
+#termcapinfo xtermc 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+
+# auto-screen support; see http://taint.org/wk/RemoteLoginAutoScreen
+# detach on hangup
+autodetach on
+# no startup msg
+startup_message off
+# always use a login shell
+shell -$SHELL
+
+# auto-log
+logfile $HOME/lib/screen-logs/%Y%m%d-%n.log
+deflog on
+
+# create a status line at the bottom of the screen.  this will show the titlesand locations of
+# all screen windows you have open at any given time
+# hardstatus alwayslastline "%{= dR} %-Lw%50>%{= dG}%n%f* %{= dW}%t%{= dR}%+Lw%<"
+hardstatus alwayslastline
+# hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+
+# %{= kG} # black, bright green
+# [ %{G}%H %{g}] # bright green, host, normal green
+
+# [%= %{= kw}
+# %?%-Lw%?            # all window numbers & names (w) up to current one (-), with flags (L)
+# %{r}(%{W}%n*%f%t    # red (, bright white, window number, *, flags, window title
+# %?(%u)%?            # all other users
+# %{r})%{w}           # red ), normal white
+# %?%+Lw%?            # all window numbers & names (w) after current one (+), with flags (L)
+# %?%= %{g}]          # 
+
+# [%{B} %d/%m %{W}%c %{g}] # bright blue, day/month, bright white time, normal green
+
+hardstatus string '%{= kw} %=%?%-w%?%{r}(%{W}%n %t%?(%u)%?%{r})%{w}%?%+w%?%='
+
+# bind some function keys (k1 == F1, etc) for fast navigation through screenwindows
+#
+# use F8 to turn the status bar off at the bottom of the screen
+bindkey -k k8 hardstatus alwayslastline
+# use F9 to turn the status bar on the bottom back on
+bindkey -k k9 hardstatus alwaysignore
+
+# This is fine for PuTTY, but doesn't work for, say, xfce terminal and desktop, which take the keys
+# the next 2 lines are set up to use F1 and F2 to move one screen forward or backward (respectively) through your screen session.
+bindkey -k k1 prev
+bindkey -k k2 next
+
+shelltitle "$ |bash"
+
+# terminfo and termcap for nice 256 color terminal
+# allow bold colors - necessary for some reason
+#attrcolor b ".I"
+# tell screen how to set colors. AB = background, AF=foreground
+# looks like you need the whole thing. even though 'co' should be number of columns
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#termcapinfo xterm 'Co#256'
+#termcapinfo xterm 'AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# erase background with current bg color
+#defbce "on" 
