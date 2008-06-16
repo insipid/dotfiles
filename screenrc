@@ -8,7 +8,7 @@
 # http://gentoo-wiki.com/TIP_Using_screen
 #
 # Auto-resume sessions when disconnected
-# http://gentoo-wiki.com/TIP_Using_screen
+# http://taint.org/wk/RemoteLoginAutoScreen
 # 
 # Man page
 # http://www.manpagez.com/man/1/screen/
@@ -47,6 +47,8 @@ hardstatus string '%{= kw} %=%?%-w%?%{r}(%{W}%n %t%?(%u)%?%{r})%{w}%?%+w%?%='
 # This is the only termcap I use, for 256-colour support. I still don't get it, though. (See below for more termcap/terminfo stuff.)
 termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 
+# Default title is bash, but use dynamic title-ing to show command name in window title (See man page, under "TITLES (naming windows)")
+# (This needs an appropriate prompt, with the right escape codes.)
 shelltitle "$ |bash"
 
 ## Options I don't use right now, but this saves looking them up if I want them
